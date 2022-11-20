@@ -1,45 +1,41 @@
 package sockets;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Cliente {
-    private static Socket socketTCP = null;
+    private static Socket socketTCP;
+    private static ServerSocket socketServidor;
     private static String ip = "127.0.0.1";
-    private static int puerto = 5000;
+    private static int puertoServidor = 5000;
+    private static int puertoRecepcion = 9090;
 
-    public static void conectarCliente() throws IOException{
-        Socket socketTCP = new Socket(ip,puerto);
+
+    public static void conectarCliente() throws IOException {
+        socketTCP = new Socket(ip, puertoServidor);
     }
-    public static void recibirMensaje() throws IOException{
+
+    public static void mantenerConexionCliente() throws IOException {
+        socketServidor = new ServerSocket(puertoRecepcion);
+    }
+
+    public static String recibirMensaje() throws IOException {
+        socketTCP = socketServidor.accept();
         DataInputStream streamInput = new DataInputStream(socketTCP.getInputStream());
         String mensajeRecibido = streamInput.readUTF();
+        return mensajeRecibido;
     }
-    public static void enviarMensaje() throws IOException{
-        DataOutputStream streamOut = new DataOutputStream(socketTCP.getOutputStream());
-        streamOut.writeUTF("sockets.Cliente: conectado con servidor");
+
+    public static void enviarMensaje(Object mensaje) throws IOException {
+        ObjectOutputStream streamOut = new ObjectOutputStream(socketTCP.getOutputStream());
+        streamOut.writeObject(mensaje);
+        streamOut.close();
     }
-    public static void desconectarCliente() throws IOException{
+
+    public static void desconectarCliente() throws IOException {
         socketTCP.close();
-    }
-
-    public static void main (String[] args){;
-
-        try {
-            //Inicio cliente
-            conectarCliente();
-            //Mensaje enviado a servidor
-            enviarMensaje();
-            //Mensaje recibido del servidor
-            recibirMensaje();
-            //Desconexion del servidor
-            desconectarCliente();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

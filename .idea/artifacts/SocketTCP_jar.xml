@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SocketTCP:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ServidorTCP</output-path>
+    <root id="archive" name="SocketTCP.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../../Entrega 3/Workspace/Server/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="SocketTCP" />
+    </root>
+  </artifact>
+</component>
